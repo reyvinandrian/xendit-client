@@ -79,8 +79,6 @@ func (c *Client) ExecuteRequest(req *http.Request, v interface{}) (httpStatus in
 		return httpStatus, err
 	}
 
-	defer res.Body.Close()
-
 	if logLevel > 2 {
 		log.Debugf("Completed in %s", time.Since(start).String())
 	}
