@@ -65,26 +65,7 @@ func (c *Client) ExecuteRequest(req *http.Request, v interface{}) (httpStatus in
 	logLevel := c.LogLevel
 	log := clog.Get()
 
-	start := time.Now()
-
 	res, err := httpClient.Do(req)
-	if err != nil {
-		if logLevel > 0 {
-			log.Error("Cannot send request ", err)
-		}
-		return httpStatus, err
-	}
-
-	if logLevel > 2 {
-		log.Debugf("Completed in %s", time.Since(start).String())
-	}
-
-	if err != nil {
-		if logLevel > 0 {
-			log.Error("Request failed ", err)
-		}
-		return httpStatus, err
-	}
 
 	resBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
