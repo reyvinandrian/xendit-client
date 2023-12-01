@@ -65,10 +65,6 @@ func (c *Client) ExecuteRequest(req *http.Request, v interface{}) (httpStatus in
 	logLevel := c.LogLevel
 	log := clog.Get()
 
-	if logLevel > 1 {
-		log.Debugf("Request %s : %s %s", req.Method, req.URL.Host, req.URL.Path)
-	}
-
 	start := time.Now()
 
 	res, err := httpClient.Do(req)
