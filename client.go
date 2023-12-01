@@ -1,7 +1,6 @@
 package xenditgo
 
 import (
-	"encoding/json"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -64,30 +63,11 @@ func (c *Client) NewRequest(method string, fullPath string, body io.Reader) (*ht
 func (c *Client) ExecuteRequest(req *http.Request, v interface{}) (httpStatus int, err error) {
 	logLevel := c.LogLevel
 	log := clog.Get()
-
 	res, err := httpClient.Do(req)
-
 	resBody, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		if logLevel > 0 {
-			log.Error("Cannot read response body ", err)
-		}
-		return httpStatus, err
-	}
-
-	if logLevel > 2 {
+	if logLevel > 1 {
 		log.Debugf("Payment response %s", string(resBody))
-	}
-
-	if v != nil {
-		if err = json.Unmarshal(resBody, v); err != nil {
-			return httpStatus, err
-		}
-
-		// we're safe to reflect status_code if response not an array
-		// if reflect.ValueOf(v).Elem().Kind() != reflect.Slice {
-		//	reflect.ValueOf(v).Elem().FieldByName("StatusCode").SetString(strconv.Itoa(res.StatusCode))
-		// }
+		log.Debugf("Request %s : %s %s", req.Method, req.URL.Host, req.URL.Path)
 	}
 
 	return res.StatusCode, nil
